@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2015.12.02 21:13:38.165.cpp,C:\Users\Gorkem Kandemir\Documents\Borland Studio Projects\Unit1.cpp=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.cpp</Transaction>
+    <Transaction>2015.12.02 21:13:38.177.h,C:\Users\Gorkem Kandemir\Documents\Borland Studio Projects\Unit1.h=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.h</Transaction>
+    <Transaction>2015.12.02 21:13:38.177.dfm,C:\Users\Gorkem Kandemir\Documents\Borland Studio Projects\Unit1.dfm=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.dfm</Transaction>
+    <Transaction>2015.12.02 21:13:40.752.bdsproj,C:\Users\Gorkem Kandemir\Documents\Borland Studio Projects\Project1.bdsproj=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Project1.bdsproj</Transaction>
+    <Transaction>2015.12.03 22:46:00.135.cpp,C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.cpp=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Reversi.cpp</Transaction>
+    <Transaction>2015.12.03 22:46:00.135.h,C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.h=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Reversi.h</Transaction>
+    <Transaction>2015.12.03 22:46:00.135.dfm,C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.dfm=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Reversi.dfm</Transaction>
+    <Transaction>2015.12.03 22:51:18.579.cpp,C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.cpp=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Game_State.cpp</Transaction>
+    <Transaction>2015.12.03 22:51:18.579.h,C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Unit1.h=C:\Users\Gorkem Kandemir\Desktop\Akademik Hayat\Doktora\Dersler\EE586\Term_Project\Game_State.h</Transaction>
+  </Transactions>
+</BorlandProject>
