@@ -37,4 +37,5 @@ void Initialize_GUI();
 void Create_Initial_State();
 void Visualize_Current_State();
 void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Col_Put, int Row_put);
+int evaluateGameState(int _State_Data[Board_Size][Board_Size],int moveNum, bool playersTurn);
 #endif

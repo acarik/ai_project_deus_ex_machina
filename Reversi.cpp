@@ -9,7 +9,16 @@
 Game_State* Initial_State = NULL;
 Game_State* Current_State = NULL;
 TImage *p_Tile_Images[Board_Size][Board_Size];
-bool is_computers_turn = false; 
+bool is_computers_turn = false;
+
+int squareWeight[Board_Size][Board_Size]=	{{100,-25,10,5,5,10,-25,100},
+											 {25,25,2,2,2,2,25,25},
+											 {10,2,5,1,1,5,2,10},
+											 {5,2,1,2,2,1,2,5},
+											 {5,2,1,2,2,1,2,5},
+											 {10,2,5,1,1,5,2,10},
+											 {25,25,2,2,2,2,25,25},
+											 {100,-25,10,5,5,10,-25,100},};
 
 /*Globals ends*/
 //---------------------------------------------------------------------------
@@ -312,7 +321,92 @@ void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Co
 		for (int j = 0; j <= Board_Size-1; j++) {
 		  (*State_Data)[i][j] = temp[i][j];							   
 		}
-  	}
+	}
+}
+//HASAN
+/*
+Evaluates the given game state and returns an integer
+*/
+int evaluateGameState(int _State_Data[Board_Size][Board_Size],int moveNum, bool playersTurn)
+{
+int result=0;
+int sWeight=0;
+int tileDiff=0,tileDiffA=0,tileDiffB=0;
+int mobilityDiff=0,mobilityA=0,mobilityB=0;
+int coeffSquareWeight=100;
+int coeffMaxTile, coeffMaxMobility;
 
-	
+
+//if computer's turn evaluate state considering white tiles
+if(playersTurn==false) {
+	//evaluate square weight component
+	for(int i=0; i<Board_Size; i++) {
+		for(int j=0; j<Board_Size; j++) {
+			if(_State_Data[i][j]==white) {
+				sWeight=sWeight + squareWeight[i][j];
+			}
+		}
+	}
+	//evaluate maximize tiles component
+	for(int i=0; i<Board_Size; i++) {
+		for(int j=0; j<Board_Size; j++) {
+			if(_State_Data[i][j]==white){
+				tileDiffA=tileDiffA+1;
+			}
+			if(_State_Data[i][j]==black){
+				tileDiffB=tileDiffB+1;
+			}
+		}
+	}
+	tileDiff=tileDiffA-tileDiffB;
+	//evaluate maximize mobility component
+	/*
+		beyaz ve siyah için possible move hesaplamaliyiz!!
+	*/
+	mobilityDiff=mobilityA-mobilityB;
+}
+//if player's turn evaluate considering black tiles
+else {
+	//evaluate square weight component
+	for(int i=0; i<Board_Size; i++) {
+		for(int j=0; j<Board_Size; j++) {
+			if(_State_Data[i][j]==black) {
+				sWeight=sWeight + squareWeight[i][j];
+			}
+		}
+	}
+	//evaluate maximize tiles component
+	for(int i=0; i<Board_Size; i++) {
+		for(int j=0; j<Board_Size; j++) {
+			if(_State_Data[i][j]==black){
+				tileDiffA=tileDiffA+1;
+			}
+			if(_State_Data[i][j]==white){
+				tileDiffB=tileDiffB+1;
+			}
+		}
+	}
+	tileDiff=tileDiffA-tileDiffB;
+	//evaluate maximize mobility component
+	/*
+		beyaz ve siyah için possible move hesaplamaliyiz!!
+	*/
+	mobilityDiff=mobilityA-mobilityB;
+}
+//calculate coefficients for tileDiff and mobilityDiff
+if(moveNum<50) {
+	coeffMaxTile=1;
+}
+else {
+	coeffMaxTile=10;
+}
+if(moveNum<50) {
+	coeffMaxMobility=1*moveNum;
+}
+else {
+	coeffMaxMobility=50;
+}
+result=coeffSquareWeight*sWeight + coeffMaxTile*tileDiff + coeffMaxMobility*mobilityDiff;
+return result;
+
 }

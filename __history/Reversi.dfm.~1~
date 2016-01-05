@@ -1,0 +1,40 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 528
+  ClientWidth = 926
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Game_Board: TDrawGrid
+    Left = 24
+    Top = 24
+    Width = 353
+    Height = 161
+    TabOrder = 0
+    OnClick = Game_BoardClick
+    RowHeights = (
+      24
+      24
+      24
+      24
+      24)
+  end
+  object Memo_Designer_Interface: TMemo
+    Left = 675
+    Top = 8
+    Width = 243
+    Height = 297
+    Lines.Strings = (
+      'Memo_Designer_Interface')
+    TabOrder = 1
+  end
+end
