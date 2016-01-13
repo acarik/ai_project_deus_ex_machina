@@ -59,17 +59,7 @@ for (int i = x-1; i <= x+1; i++) {
 	}
 }
 return false;
-/*
-if ( ( ((i-1)<=7) && ((i-1)>=0) && ((j-1)<=7) && ((j-1)>=0) &&
-((*State_Data)[i-1][j-1]!= empty)) ||
-( ((i)>=0) && ((i)<=7) && ((j-1)>=0) && ((j-1)<=7) && ((*State_Data)[i][j-1]!= empty)) ||
-( ((i+1)>=0) && ((i+1)<=7) && ((j-1)>=0) && ((j-1)<=7) && ((*State_Data)[i+1][j-1]!= empty)) ||
-( ((i-1)>=0) && ((i-1)<=7) && ((j)>=0) && ((j)<=7) && ((*State_Data)[i-1][j]!= empty)) ||
-( ((i+1)>=0) && ((i+1)<=7) && ((j)>=0) && ((j)>=0) && ((*State_Data)[i+1][j]!= empty)) ||
-( ((i-1)>=0) && ((i-1)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i-1][j+1]!= empty)) ||
-( ((i)>=0) && ((i)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i][j+1]!= empty)) ||
-( ((i+1)>=0) && ((i+1)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i+1][j+1]!= empty)) ) {
- */
+
 }
 
 int Calculate_Possible_Moves(int (*State_Data)[Board_Size][Board_Size]){
@@ -142,107 +132,6 @@ int Calculate_Possible_Moves(int (*State_Data)[Board_Size][Board_Size]){
 	  }
   }
 
-//
-//  for (int i = 0; i <= Board_Size-1; i++) {
-//	for (int j = 0; j <= Board_Size-1; j++) {
-//		  if ( (*State_Data)[i][j] == empty ) {
-//			 if ( ( ((i-1)<=7) && ((i-1)>=0) && ((j-1)<=7) && ((j-1)>=0) && ((*State_Data)[i-1][j-1]!= empty)) || ( ((i)>=0) && ((i)<=7) && ((j-1)>=0) && ((j-1)<=7) && ((*State_Data)[i][j-1]!= empty)) || ( ((i+1)>=0) && ((i+1)<=7) && ((j-1)>=0) && ((j-1)<=7) && ((*State_Data)[i+1][j-1]!= empty)) || ( ((i-1)>=0) && ((i-1)<=7) && ((j)>=0) && ((j)<=7) && ((*State_Data)[i-1][j]!= empty)) || ( ((i+1)>=0) && ((i+1)<=7) && ((j)>=0) && ((j)>=0) && ((*State_Data)[i+1][j]!= empty)) || ( ((i-1)>=0) && ((i-1)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i-1][j+1]!= empty)) || ( ((i)>=0) && ((i)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i][j+1]!= empty)) || ( ((i+1)>=0) && ((i+1)<=7) && ((j+1)>=0) && ((j+1)<=7) && ((*State_Data)[i+1][j+1]!= empty)) ) {
-//				 /* Etrafý tamamen boþ olmayan fakat kendisi boþ olan bir hücre bulduk.
-//					Bu hücre potansiyel bir legal hamle.*/
-////				 if (is_computers_turn == false) { // Oyuncunun hamle sýrasý (konacak olan taþ siyah)
-//
-//					if (( ((i-1)<=7) && ((i-1)>=0) && ((j-1)<=7) && ((j-1)>=0) && ((*State_Data)[i-1][j-1]!= empty)) && ((*State_Data)[i-1][j-1]!= oppn_color)) {
-//					   /*Sol üst çapraz dolu ise bu yönde ara*/
-//					   l = j-1;
-//					   for (k = i-1; k >= 0; k--) {
-//							if (l >= 0)
-//								if ((*State_Data)[k][l] == oppn_color)
-//									intermediate_tile = true;
-//							k--;
-//							l--;
-//							}
-//
-//					}
-//					if (( ((i)<=7) && ((i)>=0) && ((j-1)<=7) && ((j-1)>=0) && ((*State_Data)[i][j-1]!= empty)) && ((*State_Data)[i][j-1]!= oppn_color))  {
-//					   /*Yukarýsý dolu ise bu yönde ara*/
-//						  for (l = j-1; l >= 0; l--) {
-//							 if ((*State_Data)[i][l] == oppn_color) {
-//								intermediate_tile = true;
-//							 }
-//						  }
-//					}
-//					if (( ((i+1)<=7) && ((i+1)>=0) && ((j-1)<=7) && ((j-1)>=0) && ((*State_Data)[i+1][j-1]!= empty)) && ((*State_Data)[i+1][j-1]!= oppn_color))  {
-//					   /*Sað üst çapraz dolu ise bu yönde ara*/
-//					   l = j-1;
-//					   for (k = i+1; k <= Board_Size-1; k++) {
-//						if(l >= 0)
-//							 if ((*State_Data)[k][l] == oppn_color)
-//								intermediate_tile = true;
-//						l--;
-//						k++;
-//						  }
-//					}
-//					if (( ((i+1)<=7) && ((i+1)>=0) && ((j)<=7) && ((j)>=0) && ((*State_Data)[i+1][j]!= empty)) && ((*State_Data)[i+1][j]!= oppn_color))  {
-//					   /*Sað dolu ise bu yönde ara*/
-//					   for (k = i+1; k <= Board_Size-1; k++) {
-//							 if ((*State_Data)[k][j] == oppn_color) {
-//								intermediate_tile = true;
-//							 }
-//					   }
-//					}
-//					if (( ((i+1)<=7) && ((i+1)>=0) && ((j+1)<=7) && ((j+1)>=0) && ((*State_Data)[i+1][j+1]!= empty)) && ((*State_Data)[i+1][j+1]!= oppn_color))  {
-//					   /*Sað alt çapraz dolu ise bu yönde ara*/
-//					   l = j+1;
-//					   for (k = i+1; k <= Board_Size-1; k++) {
-//							if(l <= Board_Size-1)
-//							 if ((*State_Data)[k][l] == oppn_color)
-//								intermediate_tile = true;
-//						  k++;
-//						  l++;
-//					   }
-//					}
-//					if (( ((i)<=7) && ((i)>=0) && ((j+1)<=7) && ((j+1)>=0) && ((*State_Data)[i][j+1]!= empty)) && ((*State_Data)[i][j+1]!= oppn_color))  {
-//					   /*Alt dolu ise bu yönde ara*/
-//						  for (l = j+1; l <= Board_Size-1; l++) {
-//							 if ((*State_Data)[i][l] == oppn_color) {
-//								intermediate_tile = true;
-//							 }
-//						  }
-//					}
-//					if (( ((i-1)<=7) && ((i-1)>=0) && ((j+1)<=7) && ((j+1)>=0) && ((*State_Data)[i-1][j+1]!= empty)) && ((*State_Data)[i-1][j+1]!= oppn_color))  {
-//					   /*Sol alt çapraz dolu ise bu yönde ara*/
-//					   l = j+1;
-//						  for (k = i-1; k >= 0; k--) {
-//							if(l <= Board_Size-1)
-//							   if ((*State_Data)[k][l] == oppn_color)
-//								intermediate_tile = true;
-//							 k--;
-//							 l++;
-//					      }
-//					}
-//                    if (( ((i-1)<=7) && ((i-1)>=0) && ((j)<=7) && ((j)>=0) && ((*State_Data)[i-1][j]!= empty)) && ((*State_Data)[i-1][j]!= oppn_color))  {
-//					   /*Sol dolu ise bu yönde ara*/
-//						  for (k = i-1; k >= 0; k--) {
-//							   if ((*State_Data)[k][j] == oppn_color) {
-//								intermediate_tile = true;
-//							   }
-//					      }
-//					}
-//					if (intermediate_tile){
-//						number_of_possible_moves++;
-//						intermediate_tile = false;
-//						temp[i][j] = possible_move;
-//					}
-//
-////			 }
-//
-//
-//
-//			 }
-//		  }
-//	}
-//  }
-//
   for (int i = 0; i <= Board_Size-1; i++) {
 		for (int j = 0; j <= Board_Size-1; j++) {
 		  (*State_Data)[i][j] = temp[i][j];							   
