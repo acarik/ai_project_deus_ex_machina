@@ -201,17 +201,13 @@
           <Parameters Name="LoadAllSymbols">True</Parameters>
           <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
         </Parameters>
-        <Language>
-          <Language Name="ActiveLang"></Language>
-          <Language Name="ProjectLang">$00000000</Language>
-          <Language Name="RootDir"></Language>
-        </Language>
         <Linker>
           <Linker Name="LibPrefix"></Linker>
           <Linker Name="LibSuffix"></Linker>
           <Linker Name="LibVersion"></Linker>
         </Linker>
       </IDEOPTIONS>
-    </BCBPROJECT>  <buildevents/>
-  </CPlusPlusBuilder.Personality>
+    </BCBPROJECT>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
 </BorlandProject>

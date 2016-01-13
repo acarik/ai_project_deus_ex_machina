@@ -43,7 +43,7 @@ Initialize_GUI();
 }
 
 void Initialize_GUI(){
-
+    randomize();
 	/*Create Game Board*/
     Form1->Caption = "Reversi V0.0" ;
 	Form1->Game_Board->ColCount = Board_Size;
@@ -79,7 +79,7 @@ void Initialize_GUI(){
 	}
 	/*End of Create TImage Objects*/
     Create_Initial_State();
-    Visualize_Current_State();
+	Visualize_Current_State();
 
 
 }
@@ -142,34 +142,54 @@ void __fastcall TForm1::Game_BoardClick(TObject *Sender)
 	int X = 0, Y = 0;
 	int Number_of_Possible_Moves_in_Current = 0;
 	POINT p;
- 	//Form1->Memo_Designer_Interface->Lines->Add("Oldu da olduu!!!");
 
-	if (is_computers_turn == false) {
-    	GetCursorPos(&p);
+	if (is_computers_turn == false)
+	{
+		GetCursorPos(&p);
 		X = p.x; Y = p.y;
 		X = X - Form1->Left - Form1->Game_Board->Left - Form1->Game_Board->GridLineWidth;
 		Y = Y - Form1->Top - Form1->Game_Board->Top - Form1->Game_Board->GridLineWidth;
 
 		Game_Board->MouseToCell(X,Y, Col_to_Change, Row_to_Change);
 		if (Current_State->Data[Col_to_Change][Row_to_Change] != possible_move) {
-            return;
+			// gecersiz bir yere tiklanmissa cik.
+			return;
 		}
-        Current_State->Data[Col_to_Change][Row_to_Change] = black;
-		for (int i = 0; i <= Board_Size-1; i++) {
-			for (int j = 0; j <= Board_Size-1; j++) {
-				if (Current_State->Data[i][j] == possible_move )
-					 Current_State->Data[i][j] = empty;
-			}           
-		}
+		Current_State->Data[Col_to_Change][Row_to_Change] = black;
+		// current_state'ten possible move'lari temizle.
+		Clear_Possible_Moves();
+		// hamle sonucunu hesapla.
 		Calculate_Resulting_State(&Current_State->Data, Col_to_Change, Row_to_Change);
+		is_computers_turn = true;
 		Number_of_Possible_Moves_in_Current = Calculate_Possible_Moves(&Current_State->Data);
-
-    Visualize_Current_State();
+		Visualize_Current_State();
+		// simdi sira bilgisayarda
+		Form1->Memo_Designer_Interface->Lines->Add("Sira bilgisayarda");
 	}
-
-	
-
-
+	else{
+	// bilgisayar hamle yapiyor.
+			Number_of_Possible_Moves_in_Current = Calculate_Possible_Moves(&Current_State->Data);
+		while (true)
+			{
+			Col_to_Change = random(Board_Size-1);
+			Row_to_Change = random(Board_Size-1);
+			if (Current_State->Data[Col_to_Change][Row_to_Change] == possible_move) {
+				// eger sans eseri olasi hamlelerden birine denk gelmisse diger
+				// possible_move degerlerini temizle.
+				Clear_Possible_Moves();
+				// tasi koy.
+				Current_State->Data[Col_to_Change][Row_to_Change] = white;
+				Calculate_Resulting_State(&Current_State->Data, Col_to_Change, Row_to_Change);
+				// ... ve while loop'tan cik.
+				break;
+				}
+			}
+		Form1->Memo_Designer_Interface->Lines->Add("Bilgisayar oynadi.");
+		// bilgisayar oynadi.    
+		is_computers_turn = false;
+		Number_of_Possible_Moves_in_Current = Calculate_Possible_Moves(&Current_State->Data);
+		Visualize_Current_State();
+	}
 	/*Form1->Memo_Designer_Interface->Lines->Add("p.x = "+IntToStr(p.x)+" p.y = " + IntToStr(p.y));
 	Form1->Memo_Designer_Interface->Lines->Add("Form_Left = "+IntToStr(Form1->Left)+" Form_Top = " + IntToStr(Form1->Top));
 	Form1->Memo_Designer_Interface->Lines->Add("X = "+IntToStr(X)+" Y = " + IntToStr(Y));
@@ -177,55 +197,113 @@ void __fastcall TForm1::Game_BoardClick(TObject *Sender)
     */
 }
 //---------------------------------------------------------------------------
-void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Col_Put, int Row_Put){
-  bool intermediate_tile = false;
-  int temp[Board_Size][Board_Size];
-  int temp_tile_color = empty, temp_col = 0, temp_row = 0;
-  
-  for (int i = 0; i <= Board_Size-1; i++) {
-		for (int j = 0; j <= Board_Size-1; j++) {
-		  temp[i][j] = 	(*State_Data)[i][j];							   
+void Clear_Possible_Moves(void){
+/*	for (int i = 0; i <= Board_Size-1; i++)
+		for (int j = 0; j <= Board_Size-1; j++)
+			if (*(State_Data)[i][j]==possible_move)
+				*(State_Data)[i][j] = empty;
+*/				
+		for (int i = 0; i <= Board_Size-1; i++) {
+			for (int j = 0; j <= Board_Size-1; j++) {
+				if (Current_State->Data[i][j] == possible_move )
+					 Current_State->Data[i][j] = empty;
+			}
 		}
-   }
+}
+void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int x, int y){
+	bool intermediate_tile = false;
+	int temp[Board_Size][Board_Size];
+	int curr_color = -1;
+	int ci = -1;
+	int cj = -1;
+	bool flag = false;
+	int count = 0;
+	int oppn_color = -1;
+	int c = -1;
 
-   temp_tile_color = (*State_Data)[Col_Put][Row_Put];
+	for (int i = 0; i <= Board_Size-1; i++)
+		for (int j = 0; j <= Board_Size-1; j++)
+			temp[i][j] = (*State_Data)[i][j];
+
+	curr_color = (*State_Data)[x][y];
+	if (curr_color == black)
+		oppn_color = white;
+	else
+		oppn_color = black;
+
+	// tas konan yerin komsuluklarini ara
+	for (int di = -1; di <= 1; di++) {
+		for (int dj = -1; dj <= 1; dj++) {
+			if (di == 0 && dj == 0)
+				// bu bir yon degil.
+				continue;
+			ci = x + di;
+			cj = y + dj;
+			// dogrultu boyunca takip edelim.
+			count = 0;
+			while (true){
+				flag = Check_Cell(State_Data,ci,cj,oppn_color);
+				if (flag){
+					ci = ci + di;
+					cj = cj + dj;
+					count++;
+                }
+				else
+                	break;
+			}
+			// durdugumuz noktada bizim tas varsa super.
+			flag = Check_Cell(State_Data,ci,cj,curr_color);
+			if (flag) {
+				// aradaki taslari kendi rengimize cevirelim.
+				for (c = 0; c < count; c++) {
+					ci = ci - di;
+					cj = cj - dj;
+					temp[ci][cj] = curr_color;
+                }
+
+			}
+		}
+    }
 
 
+	   /*
    // Taþ konan yerden sol yukarý çapraza bak
 	if ( ((*State_Data)[Col_Put-1][Row_Put-1] != temp_tile_color) && ((*State_Data)[Col_Put-1][Row_Put-1] != empty)  ) {
-		for (int i = Col_Put-1; i >= 0; i--) {
-			for (int j = Row_Put-1; j >= 0; j--) {
+		j = Row_Put - 1;
+		for (i = Col_Put-1; i >= 0; i--) {
+			if(j >= 0) {
 				if ((*State_Data)[i][j] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = j;
 				   i = 0;
-				   break; 
+				   break;
 				}
 			}
-   		}
-		for (int i = Col_Put-1; i >= temp_col; i--) {
-			for (int j = Row_Put-1; j >= temp_row; j--) {
-			   temp[i][j] = temp_tile_color;
-			}
+			j--;
+		}
+		j = Row_Put-1;
+		for (i = Col_Put-1; i >= temp_col; i--) {
+		if (j >= temp_row)
+			temp[i][j] = temp_tile_color;
+		j--;
 		}		 
 	}
    // Taþ konan yerden  yukarýya bak
 	if ( ((*State_Data)[Col_Put][Row_Put-1] != temp_tile_color) && ((*State_Data)[Col_Put][Row_Put-1] != empty)  ) {
-			for (int j = Row_Put-1; j >= 0; j--) {
+			for (j = Row_Put-1; j >= 0; j--) {
 				if ((*State_Data)[Col_Put][j] == temp_tile_color ) {
 				   temp_col = Col_Put;
 				   temp_row = j;
 				   break; 
 				}
 			}
-			for (int j = Row_Put-1; j >= temp_row; j--) {
+			for (j = Row_Put-1; j >= temp_row; j--)
 			   temp[Col_Put][j] = temp_tile_color;
-			}
 	}
     // Taþ konan yerden sað yukarý çapraza bak
 	if ( ((*State_Data)[Col_Put+1][Row_Put-1] != temp_tile_color) && ((*State_Data)[Col_Put+1][Row_Put-1] != empty)  ) {
-		for (int i = Col_Put+1; i <= Board_Size-1; i++) {
-			for (int j = Row_Put-1; j >= 0; j--) {
+		for (i = Col_Put+1; i <= Board_Size-1; i++) {
+			for (j = Row_Put-1; j >= 0; j--) {
 				if ((*State_Data)[i][j] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = j;
@@ -233,30 +311,31 @@ void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Co
 				   break; 
 				}
 			}
-   		}
-		for (int i = Col_Put+1; i <= temp_col; i++) {
-			for (int j = Row_Put-1; j >= temp_row; j--) {
+		}
+		j = Row_Put-1;
+		for (i = Col_Put+1; i <= temp_col; i++) {
+			if(j >= temp_row)
 			   temp[i][j] = temp_tile_color;
-			}
+			j--;
 		}		 
 	}
         // Taþ konan yerden saða bak
 	if ( ((*State_Data)[Col_Put+1][Row_Put] != temp_tile_color) && ((*State_Data)[Col_Put+1][Row_Put] != empty)  ) {
-		for (int i = Col_Put+1; i <= Board_Size-1; i++) {
+		for (i = Col_Put+1; i <= Board_Size-1; i++) {
 				if ((*State_Data)[i][Row_Put] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = Row_Put;
 				   break; 
 				}
 		}
-		for (int i = Col_Put+1; i <= temp_col; i++) {
+		for (i = Col_Put+1; i <= temp_col; i++) {
 			   temp[i][Row_Put] = temp_tile_color;
 		}		 
 	}
     // Taþ konan yerden sað alt çapraza bak
 	if ( ((*State_Data)[Col_Put+1][Row_Put+1] != temp_tile_color) && ((*State_Data)[Col_Put+1][Row_Put+1] != empty)  ) {
-		for (int i = Col_Put+1; i <= Board_Size-1; i++) {
-			for (int j = Row_Put+1; j <= Board_Size-1; j++) {
+		for (i = Col_Put+1; i <= Board_Size-1; i++) {
+			for (j = Row_Put+1; j <= Board_Size-1; j++) {
 				if ((*State_Data)[i][j] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = j;
@@ -264,30 +343,33 @@ void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Co
 				   break; 
 				}
 			}
-   		}
-		for (int i = Col_Put+1; i <= temp_col; i++) {
-			for (int j = Row_Put+1; j <= temp_row; j++) {
+		}
+		j = Row_Put+1;
+		for (i = Col_Put+1; i <= temp_col; i++)
+		{
+			if(j <= temp_row)
 			   temp[i][j] = temp_tile_color;
-			}
-		}		 
+			j++;
+
+		}
 	}
     // Taþ konan yerden  aþaðýya bak
 	if ( ((*State_Data)[Col_Put][Row_Put+1] != temp_tile_color) && ((*State_Data)[Col_Put][Row_Put+1] != empty)  ) {
-			for (int j = Row_Put+1; j <= Board_Size-1; j++) {
+			for (j = Row_Put+1; j <= Board_Size-1; j++) {
 				if ((*State_Data)[Col_Put][j] == temp_tile_color ) {
 				   temp_col = Col_Put;
 				   temp_row = j;
 				   break; 
 				}
 			}
-			for (int j = Row_Put+1; j <= temp_row-1; j++) {
+			for (j = Row_Put+1; j <= temp_row-1; j++) {
                temp[Col_Put][j] = temp_tile_color;
 			}
 	}
     // Taþ konan yerden sol aþaðý çapraza bak
 	if ( ((*State_Data)[Col_Put-1][Row_Put+1] != temp_tile_color) && ((*State_Data)[Col_Put-1][Row_Put+1] != empty)  ) {
-		for (int i = Col_Put-1; i >= 0; i--) {
-			for (int j = Row_Put+1; j <= Board_Size; j++) {
+		for (i = Col_Put-1; i >= 0; i--) {
+			for (j = Row_Put+1; j <= Board_Size; j++) {
 				if ((*State_Data)[i][j] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = j;
@@ -296,32 +378,33 @@ void Calculate_Resulting_State(int (*State_Data)[Board_Size][Board_Size], int Co
 				}
 			}
 		}
-		for (int i = Col_Put-1; i >= temp_col; i--) {
-			for (int j = Row_Put+1; j <= temp_row; j++) {
+		j = Row_Put+1;
+		for (i = Col_Put-1; i >= temp_col; i--)
+		{
+			if (j<=temp_row)
 			   temp[i][j] = temp_tile_color;
-			}
+			j++;
 		}		 
 	}
 
 	     // Taþ konan yerden sola bak
 	if ( ((*State_Data)[Col_Put-1][Row_Put] != temp_tile_color) && ((*State_Data)[Col_Put-1][Row_Put] != empty)  ) {
-		for (int i = Col_Put-1; i >= 0; i--) {
+		for (i = Col_Put-1; i >= 0; i--) {
 				if ((*State_Data)[i][Row_Put] == temp_tile_color ) {
 				   temp_col = i;
 				   temp_row = Row_Put;
 				   break; 
 				}
 		}
-		for (int i = Col_Put-1; i >= temp_col; i--) {
+		for (i = Col_Put-1; i >= temp_col; i--) {
 			   temp[i][Row_Put] = temp_tile_color;
 		}		 
 	}
+	*/
 
-	for (int i = 0; i <= Board_Size-1; i++) {
-		for (int j = 0; j <= Board_Size-1; j++) {
-		  (*State_Data)[i][j] = temp[i][j];							   
-		}
-	}
+	for (int i = 0; i <= Board_Size-1; i++)
+		for (int j = 0; j <= Board_Size-1; j++)
+		  (*State_Data)[i][j] = temp[i][j];
 }
 //HASAN
 /*

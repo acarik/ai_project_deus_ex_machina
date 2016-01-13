@@ -32,7 +32,8 @@ class Game_State
               */
 };
 int Calculate_Possible_Moves(int (*State_Data)[Board_Size][Board_Size]);
-
+bool Is_Potential_Cell(int (*State_Data)[Board_Size][Board_Size], int x, int y);
+bool Check_Cell(int (*State_Data)[Board_Size][Board_Size],int i,int j,int oppn_color);
 
 
 
